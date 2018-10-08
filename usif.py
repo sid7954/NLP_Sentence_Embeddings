@@ -138,7 +138,7 @@ class uSIF(object):
 			embed1_t = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens)))
 			embed1_t = np.mean(embed1_t, axis=0) 
 
-			if (len(v_t) >=12):
+			if (len(v_t) >=6):
 				if (len(v_t) % 2 ==0):
 					embed2_t_1 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[1:len(tokens)/2])))
 					embed2_t_2 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[len(tokens)/2:-1])))
@@ -146,47 +146,47 @@ class uSIF(object):
 					embed2_t_1 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[1:(len(tokens)+1)/2])))
 					embed2_t_2 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)+1)/2:-1])))
 
-				if (len(v_t) % 4 ==0):
-					embed4_t_1 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[1:len(tokens)/4])))
-					embed4_t_2 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[len(tokens)/4:len(tokens)/2])))
-					embed4_t_3 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[len(tokens)/2: 3*len(tokens)/4])))
-					embed4_t_4 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[ 3*len(tokens)/4:-1])))
-				elif (len(v_t) % 4 ==1) : 
-					embed4_t_1 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[1:(len(tokens)-1)/4])))
-					embed4_t_2 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)-1)/4:(len(tokens)-1)/2])))
-					embed4_t_3 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)-1)/2:3*(len(tokens)-1)/4])))
-					embed4_t_4 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[3*(len(tokens)-1)/4:-1])))
-				elif (len(v_t) % 4 ==2) : 
-					embed4_t_1 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[1:(len(tokens)+2)/4])))
-					embed4_t_2 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)+2)/4:(len(tokens)+2)/2])))
-					embed4_t_3 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)+2)/2: 3*(len(tokens)+2)/4])))
-					embed4_t_4 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[3*(len(tokens)+2)/4:-1])))
-				else:
-					embed4_t_1 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[1:(len(tokens)+1)/4])))
-					embed4_t_2 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)+1)/4:(len(tokens)+1)/2])))
-					embed4_t_3 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)+1)/2:3*(len(tokens)+1)/4])))
-					embed4_t_4 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[3*(len(tokens)+1)/4:-1])))
+				# if (len(v_t) % 4 ==0):
+				# 	embed4_t_1 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[1:len(tokens)/4])))
+				# 	embed4_t_2 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[len(tokens)/4:len(tokens)/2])))
+				# 	embed4_t_3 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[len(tokens)/2: 3*len(tokens)/4])))
+				# 	embed4_t_4 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[ 3*len(tokens)/4:-1])))
+				# elif (len(v_t) % 4 ==1) : 
+				# 	embed4_t_1 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[1:(len(tokens)-1)/4])))
+				# 	embed4_t_2 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)-1)/4:(len(tokens)-1)/2])))
+				# 	embed4_t_3 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)-1)/2:3*(len(tokens)-1)/4])))
+				# 	embed4_t_4 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[3*(len(tokens)-1)/4:-1])))
+				# elif (len(v_t) % 4 ==2) : 
+				# 	embed4_t_1 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[1:(len(tokens)+2)/4])))
+				# 	embed4_t_2 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)+2)/4:(len(tokens)+2)/2])))
+				# 	embed4_t_3 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)+2)/2: 3*(len(tokens)+2)/4])))
+				# 	embed4_t_4 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[3*(len(tokens)+2)/4:-1])))
+				# else:
+				# 	embed4_t_1 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[1:(len(tokens)+1)/4])))
+				# 	embed4_t_2 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)+1)/4:(len(tokens)+1)/2])))
+				# 	embed4_t_3 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[(len(tokens)+1)/2:3*(len(tokens)+1)/4])))
+				# 	embed4_t_4 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[3*(len(tokens)+1)/4:-1])))
 
 				embed2_t_1 = np.mean(embed2_t_1, axis=0)
 				embed2_t_2 = np.mean(embed2_t_2, axis=0)
 				embed2_t = np.maximum(embed2_t_1, embed2_t_2)  #Max Pooling between the two halves
 
-				embed4_t_1 = np.mean(embed4_t_1, axis=0)
-				embed4_t_2 = np.mean(embed4_t_2, axis=0)
-				embed4_t_3 = np.mean(embed4_t_3, axis=0)
-				embed4_t_4 = np.mean(embed4_t_4, axis=0)
+				# embed4_t_1 = np.mean(embed4_t_1, axis=0)
+				# embed4_t_2 = np.mean(embed4_t_2, axis=0)
+				# embed4_t_3 = np.mean(embed4_t_3, axis=0)
+				# embed4_t_4 = np.mean(embed4_t_4, axis=0)
 
-				embed4_t = np.maximum(embed4_t_1, embed4_t_2)  #Max Pooling between the two halves
-				embed4_t = np.maximum(embed4_t, embed4_t_3)
-				embed4_t = np.maximum(embed4_t, embed4_t_4)
+				# embed4_t = np.maximum(embed4_t_1, embed4_t_2)  #Max Pooling between the two halves
+				# embed4_t = np.maximum(embed4_t, embed4_t_3)
+				# embed4_t = np.maximum(embed4_t, embed4_t_4)
 
 				# print np.shape(embed1_t)
 				# print np.shape(embed2_t)
 				# print np.shape(embed4_t)
 
-				return np.concatenate((embed1_t, embed2_t ,embed4_t), axis=0)
+				return np.concatenate((embed1_t, embed2_t), axis=0)
 			else:
-				return np.concatenate((embed1_t, embed1_t, embed1_t), axis=0)
+				return np.concatenate((embed1_t, embed1_t), axis=0)
 
 	def embed(self, sentences):
 		"""Embed a list of sentences.
