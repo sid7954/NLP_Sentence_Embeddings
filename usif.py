@@ -183,9 +183,9 @@ class uSIF(object):
 				embed4_t = np.maximum(embed4_t, embed4_t_3)
 				embed4_t = np.maximum(embed4_t, embed4_t_4)
 
-				# print np.shape(embed1_t)
-				# print np.shape(embed2_t)
-				# print np.shape(embed4_t)
+				print np.shape(embed1_t)
+				print np.shape(embed2_t)
+				print np.shape(embed4_t)
 
 				return np.concatenate((embed1_t, embed2_t), axis=0)
 			else:
