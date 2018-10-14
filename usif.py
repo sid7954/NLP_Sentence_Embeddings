@@ -2,6 +2,9 @@ import re
 import os
 import numpy as np
 from sklearn.decomposition import TruncatedSVD
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+from sklearn.metrics import accuracy_score
 from scipy.spatial.distance import cosine
 from scipy.stats import pearsonr
 from scipy.linalg import svd
@@ -138,7 +141,7 @@ class uSIF(object):
 			embed1_t = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens)))
 			embed1_t = np.mean(embed1_t, axis=0) 
 
-			if (len(v_t) >=6):
+			if (len(v_t) >=16):
 				if (len(v_t) % 2 ==0):
 					embed2_t_1 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[1:len(tokens)/2])))
 					embed2_t_2 = np.array(map(lambda (i,t): self.weight(t) * v_t[i,:], enumerate(tokens[len(tokens)/2:-1])))
@@ -245,11 +248,89 @@ def test_STS(model):
 
 			score = pearsonr(y, y_hat)[0]
 			scores.append(score)
-			print score
+			#print score
 			#print fn, "\t", score
 		
 		print np.mean(scores)
-		#print td, np.mean(scores), "\n"
+		# print td, np.mean(scores), "\n"
+
+
+def test_SST(model):
+	"""Test the performance on the SST task and print out the results.
+
+
+	Args:
+		model: a uSIF object
+	""" 
+	scores = []
+
+	sentences = re.split(r'\n', open("data/stsa.fine.train").read().strip())
+	a = [z.split(" ") for z in sentences]
+	y = [x[0] for x in a]
+	sentences = [" ".join(x[1:-1]) for x in a]
+	logreg = LogisticRegression(max_iter=1000 ,C=1e5, solver='lbfgs', multi_class='multinomial')
+
+	vectors_1 = model.embed(sentences[0:1500])
+	print "Done 1"
+	vectors_2 = model.embed(sentences[1500:3000])
+	print "Done 2"
+	vectors_3 = model.embed(sentences[3000:4900])
+	print "Done 3"
+	vectors_4 = model.embed(sentences[5000:6000])
+	print "Done 4"
+	vectors_5 = model.embed(sentences[6000:7500])
+	print "Done 5"
+	vectors_6 = model.embed(sentences[7500:-1])
+	print "Done 6"
+	vectors = np.concatenate((vectors_1,vectors_2), axis=0)
+	vectors = np.concatenate((vectors,vectors_3), axis=0)
+	vectors = np.concatenate((vectors,vectors_4), axis=0)
+	vectors = np.concatenate((vectors,vectors_5), axis=0)
+	vectors = np.concatenate((vectors,vectors_6), axis=0)
+
+	y_1 =y[0:4900]
+	y_2 =y[5000:-1]
+
+	logreg.fit(vectors,np.concatenate((y_1,y_2),axis=0))
+	# logreg.fit(model.embed(sentences[1500:3000]),y[1500:3000])
+	# logreg.fit(model.embed(sentences[3000:4500]),y[3000:4500])
+	# logreg.fit(model.embed(sentences[4500:6000]),y[4500:6000])
+	# logreg.fit(model.embed(sentences[6000:7500]),y[6000:7500])
+	# logreg.fit(model.embed(sentences[7500:-1]),y[7500:-1])
+
+	test_sentences = re.split(r'\n', open("data/stsa.fine.test").read().strip())
+	test_a = [z.split(" ") for z in test_sentences]
+	test_y = [x[0] for x in test_a]
+	test_sentences = [" ".join(x[1:-1]) for x in test_a]
+
+	test_vectors_1 = model.embed(test_sentences[0:1500])
+	print "Done test 1"
+	test_vectors_2 = model.embed(test_sentences[1500:-1])
+	print "Done test 2"
+
+	test_vectors = np.concatenate((test_vectors_1,test_vectors_2),axis=0)
+
+	pred_y = logreg.predict(test_vectors)
+
+	test_y_1 = test_y[0:1500]
+	test_y_2 = test_y[1500:-1]
+
+
+	print classification_report(np.concatenate((test_y_1,test_y_2),axis=0), pred_y)
+
+	print accuracy_score(np.concatenate((test_y_1,test_y_2),axis=0), pred_y)
+
+	# y_hat = [ 1 - cosine(vectors[i], vectors[i+1]) for i in range(0, len(vectors), 2) ]
+	# y = map(float, open(td + fn.replace('input', 'gs')).read().strip().split('\n'))
+
+	# score = pearsonr(y, y_hat)[0]
+	# scores.append(score)
+	# print score
+	# #print fn, "\t", score
+	
+	# print np.mean(scores)
+	# #print td, np.mean(scores), "\n"
+
 
 
 def get_paranmt_usif():
@@ -260,4 +341,5 @@ def get_paranmt_usif():
 
 if __name__== "__main__":
 	test_STS(get_paranmt_usif())
+	#test_SST(get_paranmt_usif())
 
